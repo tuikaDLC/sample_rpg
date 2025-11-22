@@ -11,21 +11,21 @@ class Player extends Entity {
 
         if (gameState.getState() !== 'field') return;
 
-        this.moveTimer += deltaTime;
-
-        if (this.moveTimer >= this.moveDelay) {
+        // 移動中でなければ新しい移動を受け付ける
+        if (!this.isMoving) {
             const input = inputHandler.getMovementInput();
 
             if (input.dx !== 0 || input.dy !== 0) {
                 this.tryMove(input.dx, input.dy);
-                this.moveTimer = 0;
             }
         }
 
-        // ランダムエンカウント判定
-        if (this.isMoving) {
+        // ランダムエンカウント判定（タイル移動完了時）
+        if (!this.isMoving && this.wasMoving) {
             this.checkRandomEncounter();
         }
+
+        this.wasMoving = this.isMoving;
     }
 
     tryMove(dx, dy) {
@@ -43,14 +43,15 @@ class Player extends Entity {
         if (!map) return;
 
         if (map.canMove(newX, newY)) {
-            this.x = newX;
-            this.y = newY;
+            // 目標位置を設定（スムーズに移動開始）
+            this.targetX = newX;
+            this.targetY = newY;
             this.isMoving = true;
 
-            // マップ遷移チェック
+            // マップ遷移チェック（目標位置で）
             map.checkTransition(newX, newY);
 
-            // イベントチェック
+            // イベントチェック（目標位置で）
             map.checkEvent(newX, newY);
 
             // ゲームステートのプレイヤー位置を更新

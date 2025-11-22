@@ -279,36 +279,45 @@ const gameData = {
     maps: {
         'village': {
             name: '記憶の村',
-            width: 30,
-            height: 20,
+            width: 40,
+            height: 30,
             bgColor: '#2d5016',
-            encounterRate: 0, // 村ではエンカウントなし
+            encounterRate: 0,
             encounterEnemies: [],
             tiles: (() => {
                 const map = [];
-                for (let y = 0; y < 20; y++) {
+                for (let y = 0; y < 30; y++) {
                     const row = [];
-                    for (let x = 0; x < 30; x++) {
+                    for (let x = 0; x < 40; x++) {
                         row.push('tile_grass');
                     }
                     map.push(row);
                 }
-                // 道を追加
-                for (let x = 0; x < 30; x++) {
-                    map[10][x] = 'tile_stone';
+                // メイン道路（横）
+                for (let x = 0; x < 40; x++) {
+                    map[15][x] = 'tile_stone';
+                    map[16][x] = 'tile_stone';
                 }
-                for (let y = 0; y < 20; y++) {
-                    map[y][15] = 'tile_stone';
+                // メイン道路（縦）
+                for (let y = 0; y < 30; y++) {
+                    map[y][20] = 'tile_stone';
+                    map[y][21] = 'tile_stone';
+                }
+                // 小道
+                for (let x = 8; x < 15; x++) {
+                    map[10][x] = 'tile_dirt';
+                }
+                for (let x = 27; x < 34; x++) {
+                    map[10][x] = 'tile_dirt';
                 }
                 return map;
             })(),
             collision: (() => {
                 const collision = [];
-                for (let y = 0; y < 20; y++) {
+                for (let y = 0; y < 30; y++) {
                     const row = [];
-                    for (let x = 0; x < 30; x++) {
-                        // 外周は壁
-                        if (x === 0 || x === 29 || y === 0 || y === 19) {
+                    for (let x = 0; x < 40; x++) {
+                        if (x === 0 || x === 39 || y === 0 || y === 29) {
                             row.push(1);
                         } else {
                             row.push(0);
@@ -316,17 +325,121 @@ const gameData = {
                     }
                     collision.push(row);
                 }
+                // 建物の衝突（2x2タイル）
+                // 村長の家（左上）
+                for (let y = 5; y < 7; y++) for (let x = 3; x < 5; x++) collision[y][x] = 1;
+                // 小さな家（左中）
+                for (let y = 11; y < 13; y++) for (let x = 3; x < 5; x++) collision[y][x] = 1;
+                // 宿屋（左下）
+                for (let y = 20; y < 23; y++) for (let x = 2; x < 5; x++) collision[y][x] = 1;
+                // 商店（右上）
+                for (let y = 5; y < 8; y++) for (let x = 35; x < 38; x++) collision[y][x] = 1;
+                // 大きな家（右下）
+                for (let y = 20; y < 23; y++) for (let x = 34; x < 37; x++) collision[y][x] = 1;
+
                 return collision;
             })(),
+            objects: [
+                // 村長の家エリア（左上）
+                { x: 3, y: 3, sprite: 'obj_house_small' },
+                { x: 2.5, y: 6, sprite: 'obj_oak_tree' },
+                { x: 6, y: 5, sprite: 'obj_bush' },
+                { x: 7, y: 4, sprite: 'obj_flower_red' },
+                { x: 7.5, y: 4.5, sprite: 'obj_flower_blue' },
+
+                // 左中の家
+                { x: 3, y: 9, sprite: 'obj_house_small' },
+                { x: 2, y: 12, sprite: 'obj_pine_tree' },
+                { x: 6.5, y: 11, sprite: 'obj_bush' },
+                { x: 7, y: 10, sprite: 'obj_flower_yellow' },
+
+                // 宿屋エリア（左下）
+                { x: 2, y: 18, sprite: 'obj_inn' },
+                { x: 1.5, y: 22, sprite: 'obj_sign' },
+                { x: 6, y: 21, sprite: 'obj_bench' },
+                { x: 7, y: 20, sprite: 'obj_lamppost' },
+
+                // 商店エリア（右上）
+                { x: 35, y: 3, sprite: 'obj_shop' },
+                { x: 34, y: 7, sprite: 'obj_barrel' },
+                { x: 35.5, y: 7, sprite: 'obj_crate' },
+                { x: 37, y: 7, sprite: 'obj_barrel' },
+                { x: 32, y: 5, sprite: 'obj_sign' },
+
+                // 大きな家（右下）
+                { x: 34, y: 18, sprite: 'obj_house_large' },
+                { x: 33, y: 22, sprite: 'obj_small_tree' },
+                { x: 37.5, y: 21, sprite: 'obj_bush' },
+
+                // 中央広場エリア
+                { x: 18, y: 13, sprite: 'obj_well' },
+                { x: 23, y: 12, sprite: 'obj_bench' },
+                { x: 23, y: 18, sprite: 'obj_bench' },
+                { x: 17, y: 19, sprite: 'obj_lamppost' },
+                { x: 24, y: 14, sprite: 'obj_lamppost' },
+
+                // 木々（外周付近）
+                { x: 1.5, y: 1, sprite: 'obj_oak_tree' },
+                { x: 5, y: 1.5, sprite: 'obj_pine_tree' },
+                { x: 10, y: 1, sprite: 'obj_oak_tree' },
+                { x: 30, y: 1.5, sprite: 'obj_pine_tree' },
+                { x: 35, y: 1, sprite: 'obj_oak_tree' },
+                { x: 37.5, y: 2, sprite: 'obj_small_tree' },
+                { x: 1, y: 25, sprite: 'obj_pine_tree' },
+                { x: 38, y: 26, sprite: 'obj_oak_tree' },
+
+                // 花と茂み（装飾）
+                { x: 10, y: 13, sprite: 'obj_flower_red' },
+                { x: 11, y: 13, sprite: 'obj_flower_blue' },
+                { x: 12, y: 13, sprite: 'obj_flower_yellow' },
+                { x: 30, y: 13, sprite: 'obj_flower_red' },
+                { x: 31, y: 13, sprite: 'obj_flower_blue' },
+                { x: 9, y: 17, sprite: 'obj_bush' },
+                { x: 12, y: 18, sprite: 'obj_bush' },
+                { x: 28, y: 17, sprite: 'obj_bush' },
+                { x: 31, y: 18, sprite: 'obj_bush' },
+
+                // 岩と切り株
+                { x: 8, y: 3, sprite: 'obj_rock' },
+                { x: 15, y: 2, sprite: 'obj_stump' },
+                { x: 25, y: 3, sprite: 'obj_rock' },
+                { x: 33, y: 3, sprite: 'obj_small_rock' },
+                { x: 10, y: 25, sprite: 'obj_stump' },
+                { x: 28, y: 26, sprite: 'obj_rock' },
+
+                // フェンス（装飾的に配置）
+                { x: 8, y: 7, sprite: 'obj_fence_h' },
+                { x: 9, y: 7, sprite: 'obj_fence_h' },
+                { x: 30, y: 10, sprite: 'obj_fence_h' },
+                { x: 31, y: 10, sprite: 'obj_fence_h' },
+
+                // 壺やその他小物
+                { x: 6, y: 8, sprite: 'obj_pot' },
+                { x: 33, y: 11, sprite: 'obj_pot' },
+
+                // 背の高い草（自然な感じ）
+                { x: 14, y: 5, sprite: 'obj_tall_grass' },
+                { x: 26, y: 8, sprite: 'obj_tall_grass' },
+                { x: 15, y: 22, sprite: 'obj_tall_grass' },
+                { x: 25, y: 24, sprite: 'obj_tall_grass' }
+            ],
             npcs: [
-                { x: 15, y: 5, name: '村長', dialogId: 'elder_intro', sprite: 'npc' },
-                { x: 10, y: 10, name: '宿屋の主人', dialogId: 'innkeeper', sprite: 'npc' },
-                { x: 20, y: 10, name: '商人', dialogId: 'merchant', sprite: 'npc' },
-                { x: 15, y: 15, name: '謎の少女', dialogId: 'mysterious_girl', sprite: 'npc' }
+                { x: 4, y: 6, name: '村長', dialogId: 'elder_intro', sprite: 'npc' },
+                { x: 3, y: 21, name: '宿屋の主人', dialogId: 'innkeeper', sprite: 'npc' },
+                { x: 36, y: 6, name: '商人', dialogId: 'merchant', sprite: 'npc' },
+                { x: 20, y: 18, name: '謎の少女', dialogId: 'mysterious_girl', sprite: 'npc' }
             ],
             events: [],
             transitions: [
-                { x: 15, y: 0, targetMap: 'forest', targetX: 15, targetY: 18 }
+                // 森への出口
+                { x: 20, y: 0, targetMap: 'forest', targetX: 15, targetY: 18 },
+                { x: 21, y: 0, targetMap: 'forest', targetX: 15, targetY: 18 },
+                // 村長の家の入口
+                { x: 4, y: 6, targetMap: 'elder_house', targetX: 6, targetY: 8 },
+                // 宿屋の入口
+                { x: 3, y: 22, targetMap: 'inn_interior', targetX: 7, targetY: 10 },
+                // 商店の入口
+                { x: 36, y: 7, targetMap: 'shop_interior', targetX: 6, targetY: 8 }
             ]
         },
         'forest': {
@@ -422,6 +535,192 @@ const gameData = {
             ],
             transitions: [
                 { x: 15, y: 19, targetMap: 'forest', targetX: 15, targetY: 1 }
+            ]
+        },
+        'elder_house': {
+            name: '村長の家',
+            width: 12,
+            height: 10,
+            bgColor: '#3e2723',
+            encounterRate: 0,
+            encounterEnemies: [],
+            tiles: (() => {
+                const map = [];
+                for (let y = 0; y < 10; y++) {
+                    const row = [];
+                    for (let x = 0; x < 12; x++) {
+                        if (y === 0 || y === 9 || x === 0 || x === 11) {
+                            row.push('tile_wall');
+                        } else {
+                            row.push('tile_wood_floor');
+                        }
+                    }
+                    map.push(row);
+                }
+                // カーペット
+                map[5][6] = 'tile_carpet';
+                map[5][7] = 'tile_carpet';
+                map[6][6] = 'tile_carpet';
+                map[6][7] = 'tile_carpet';
+                return map;
+            })(),
+            collision: (() => {
+                const collision = [];
+                for (let y = 0; y < 10; y++) {
+                    const row = [];
+                    for (let x = 0; x < 12; x++) {
+                        if (y === 0 || y === 9 || x === 0 || x === 11) {
+                            row.push(1);
+                        } else if (y === 9 && (x === 5 || x === 6)) {
+                            row.push(0); // 出口
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    collision.push(row);
+                }
+                // 家具の衝突
+                collision[2][2] = 1; // ベッド
+                collision[2][9] = 1; // 本棚
+                collision[7][3] = 1; // テーブル
+                return collision;
+            })(),
+            objects: [
+                { x: 2, y: 1.5, sprite: 'obj_bed' },
+                { x: 9, y: 2, sprite: 'obj_bookshelf' },
+                { x: 3, y: 6.5, sprite: 'obj_table' },
+                { x: 2.5, y: 7, sprite: 'obj_chair' },
+                { x: 4, y: 7, sprite: 'obj_chair' },
+                { x: 1, y: 5, sprite: 'obj_pot' },
+                { x: 10, y: 7, sprite: 'obj_barrel' }
+            ],
+            npcs: [],
+            events: [],
+            transitions: [
+                { x: 5, y: 9, targetMap: 'village', targetX: 4, targetY: 6 },
+                { x: 6, y: 9, targetMap: 'village', targetX: 4, targetY: 6 }
+            ]
+        },
+        'inn_interior': {
+            name: '宿屋',
+            width: 14,
+            height: 12,
+            bgColor: '#4e342e',
+            encounterRate: 0,
+            encounterEnemies: [],
+            tiles: (() => {
+                const map = [];
+                for (let y = 0; y < 12; y++) {
+                    const row = [];
+                    for (let x = 0; x < 14; x++) {
+                        if (y === 0 || y === 11 || x === 0 || x === 13) {
+                            row.push('tile_wall');
+                        } else {
+                            row.push('tile_wood_floor');
+                        }
+                    }
+                    map.push(row);
+                }
+                return map;
+            })(),
+            collision: (() => {
+                const collision = [];
+                for (let y = 0; y < 12; y++) {
+                    const row = [];
+                    for (let x = 0; x < 14; x++) {
+                        if (y === 0 || y === 11 || x === 0 || x === 13) {
+                            row.push(1);
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    collision.push(row);
+                }
+                // 出口
+                collision[11][6] = 0;
+                collision[11][7] = 0;
+                // 家具の衝突
+                collision[2][2] = 1; // ベッド1
+                collision[2][6] = 1; // ベッド2
+                collision[2][10] = 1; // ベッド3
+                collision[8][5] = 1; // テーブル
+                return collision;
+            })(),
+            objects: [
+                { x: 2, y: 1.5, sprite: 'obj_bed' },
+                { x: 6, y: 1.5, sprite: 'obj_bed' },
+                { x: 10, y: 1.5, sprite: 'obj_bed' },
+                { x: 5, y: 7.5, sprite: 'obj_table' },
+                { x: 4, y: 8, sprite: 'obj_chair' },
+                { x: 6.5, y: 8, sprite: 'obj_chair' },
+                { x: 11, y: 6, sprite: 'obj_barrel' },
+                { x: 1, y: 9, sprite: 'obj_pot' }
+            ],
+            npcs: [],
+            events: [],
+            transitions: [
+                { x: 6, y: 11, targetMap: 'village', targetX: 3, targetY: 22 },
+                { x: 7, y: 11, targetMap: 'village', targetX: 3, targetY: 22 }
+            ]
+        },
+        'shop_interior': {
+            name: '商店',
+            width: 12,
+            height: 10,
+            bgColor: '#5d4037',
+            encounterRate: 0,
+            encounterEnemies: [],
+            tiles: (() => {
+                const map = [];
+                for (let y = 0; y < 10; y++) {
+                    const row = [];
+                    for (let x = 0; x < 12; x++) {
+                        if (y === 0 || y === 9 || x === 0 || x === 11) {
+                            row.push('tile_wall');
+                        } else {
+                            row.push('tile_wood_floor');
+                        }
+                    }
+                    map.push(row);
+                }
+                return map;
+            })(),
+            collision: (() => {
+                const collision = [];
+                for (let y = 0; y < 10; y++) {
+                    const row = [];
+                    for (let x = 0; x < 12; x++) {
+                        if (y === 0 || y === 9 || x === 0 || x === 11) {
+                            row.push(1);
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    collision.push(row);
+                }
+                // 出口
+                collision[9][5] = 0;
+                collision[9][6] = 0;
+                // カウンター
+                collision[5][5] = 1;
+                collision[5][6] = 1;
+                return collision;
+            })(),
+            objects: [
+                { x: 5, y: 4.5, sprite: 'obj_table' },
+                { x: 2, y: 2, sprite: 'obj_barrel' },
+                { x: 3, y: 2, sprite: 'obj_crate' },
+                { x: 4, y: 2, sprite: 'obj_barrel' },
+                { x: 8, y: 2, sprite: 'obj_crate' },
+                { x: 9, y: 2, sprite: 'obj_barrel' },
+                { x: 2, y: 7, sprite: 'obj_pot' },
+                { x: 9, y: 7, sprite: 'obj_pot' }
+            ],
+            npcs: [],
+            events: [],
+            transitions: [
+                { x: 5, y: 9, targetMap: 'village', targetX: 36, targetY: 7 },
+                { x: 6, y: 9, targetMap: 'village', targetX: 36, targetY: 7 }
             ]
         }
     },
