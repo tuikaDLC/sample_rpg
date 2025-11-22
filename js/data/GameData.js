@@ -145,6 +145,12 @@ const gameData = {
                 text: '村長「まずは村を見て回るといい。[WASD]か[矢印キー]で移動できるぞ」'
             },
             {
+                text: '村長「建物に入るには、ドア（建物の下側）の前に立って進むだけじゃ」'
+            },
+            {
+                text: '村長「村の南には闇のダンジョンへの入口がある。強くなったら挑戦してみるといい」'
+            },
+            {
                 text: '村長「NPCの近くで[SPACE]を押すと話しかけられる。どの方向からでもOKじゃ！」'
             },
             {
@@ -325,17 +331,42 @@ const gameData = {
                     }
                     collision.push(row);
                 }
-                // 建物の衝突（2x2タイル）
-                // 村長の家（左上）
-                for (let y = 5; y < 7; y++) for (let x = 3; x < 5; x++) collision[y][x] = 1;
-                // 小さな家（左中）
-                for (let y = 11; y < 13; y++) for (let x = 3; x < 5; x++) collision[y][x] = 1;
-                // 宿屋（左下）
-                for (let y = 20; y < 23; y++) for (let x = 2; x < 5; x++) collision[y][x] = 1;
-                // 商店（右上）
-                for (let y = 5; y < 8; y++) for (let x = 35; x < 38; x++) collision[y][x] = 1;
-                // 大きな家（右下）
-                for (let y = 20; y < 23; y++) for (let x = 34; x < 37; x++) collision[y][x] = 1;
+
+                // 建物の衝突（建物の画像サイズに基づく）
+                // 村長の家（左上） - 64x64px = 2x2タイル、ドアはy=7に配置
+                collision[3][3] = 1; collision[3][4] = 1;
+                collision[4][3] = 1; collision[4][4] = 1;
+                collision[5][3] = 1; collision[5][4] = 1;
+                collision[6][3] = 1; collision[6][4] = 1;
+                // ドアの位置は開ける (y=7, x=3,4)
+
+                // 小さな家（左中） - 64x64px = 2x2タイル、ドアはy=13に配置
+                collision[9][3] = 1; collision[9][4] = 1;
+                collision[10][3] = 1; collision[10][4] = 1;
+                collision[11][3] = 1; collision[11][4] = 1;
+                collision[12][3] = 1; collision[12][4] = 1;
+                // ドアの位置は開ける (y=13, x=3,4)
+
+                // 宿屋（左下） - 80x72px = 2.5x2.25タイル
+                collision[18][2] = 1; collision[18][3] = 1; collision[18][4] = 1;
+                collision[19][2] = 1; collision[19][3] = 1; collision[19][4] = 1;
+                collision[20][2] = 1; collision[20][3] = 1; collision[20][4] = 1;
+                collision[21][2] = 1; collision[21][3] = 1; collision[21][4] = 1;
+                // ドアの位置は開ける (y=22, x=3,4)
+
+                // 商店（右上） - 80x72px = 2.5x2.25タイル
+                collision[3][35] = 1; collision[3][36] = 1; collision[3][37] = 1;
+                collision[4][35] = 1; collision[4][36] = 1; collision[4][37] = 1;
+                collision[5][35] = 1; collision[5][36] = 1; collision[5][37] = 1;
+                collision[6][35] = 1; collision[6][36] = 1; collision[6][37] = 1;
+                // ドアの位置は開ける (y=7, x=36,37)
+
+                // 大きな家（右下） - 96x80px = 3x2.5タイル
+                collision[18][34] = 1; collision[18][35] = 1; collision[18][36] = 1;
+                collision[19][34] = 1; collision[19][35] = 1; collision[19][36] = 1;
+                collision[20][34] = 1; collision[20][35] = 1; collision[20][36] = 1;
+                collision[21][34] = 1; collision[21][35] = 1; collision[21][36] = 1;
+                collision[22][34] = 1; collision[22][35] = 1; collision[22][36] = 1;
 
                 return collision;
             })(),
@@ -421,12 +452,17 @@ const gameData = {
                 { x: 14, y: 5, sprite: 'obj_tall_grass' },
                 { x: 26, y: 8, sprite: 'obj_tall_grass' },
                 { x: 15, y: 22, sprite: 'obj_tall_grass' },
-                { x: 25, y: 24, sprite: 'obj_tall_grass' }
+                { x: 25, y: 24, sprite: 'obj_tall_grass' },
+
+                // ダンジョン入口の目印
+                { x: 19, y: 27, sprite: 'obj_sign' },
+                { x: 19, y: 26, sprite: 'obj_lamppost' },
+                { x: 22, y: 26, sprite: 'obj_lamppost' }
             ],
             npcs: [
-                { x: 4, y: 6, name: '村長', dialogId: 'elder_intro', sprite: 'npc' },
-                { x: 3, y: 21, name: '宿屋の主人', dialogId: 'innkeeper', sprite: 'npc' },
-                { x: 36, y: 6, name: '商人', dialogId: 'merchant', sprite: 'npc' },
+                { x: 6, y: 7, name: '村長', dialogId: 'elder_intro', sprite: 'npc' },
+                { x: 6, y: 22, name: '宿屋の主人', dialogId: 'innkeeper', sprite: 'npc' },
+                { x: 38, y: 7, name: '商人', dialogId: 'merchant', sprite: 'npc' },
                 { x: 20, y: 18, name: '謎の少女', dialogId: 'mysterious_girl', sprite: 'npc' }
             ],
             events: [],
@@ -434,12 +470,20 @@ const gameData = {
                 // 森への出口
                 { x: 20, y: 0, targetMap: 'forest', targetX: 15, targetY: 18 },
                 { x: 21, y: 0, targetMap: 'forest', targetX: 15, targetY: 18 },
-                // 村長の家の入口
-                { x: 4, y: 6, targetMap: 'elder_house', targetX: 6, targetY: 8 },
-                // 宿屋の入口
+                // 村長の家の入口（ドアの前、家の下）
+                { x: 3, y: 7, targetMap: 'elder_house', targetX: 6, targetY: 8 },
+                { x: 4, y: 7, targetMap: 'elder_house', targetX: 6, targetY: 8 },
+                // 小さな家の入口
+                { x: 3, y: 13, targetMap: 'elder_house', targetX: 6, targetY: 8 },
+                { x: 4, y: 13, targetMap: 'elder_house', targetX: 6, targetY: 8 },
+                // 宿屋の入口（ドアの前）
                 { x: 3, y: 22, targetMap: 'inn_interior', targetX: 7, targetY: 10 },
-                // 商店の入口
-                { x: 36, y: 7, targetMap: 'shop_interior', targetX: 6, targetY: 8 }
+                { x: 4, y: 22, targetMap: 'inn_interior', targetX: 7, targetY: 10 },
+                // 商店の入口（ドアの前）
+                { x: 36, y: 7, targetMap: 'shop_interior', targetX: 6, targetY: 8 },
+                { x: 37, y: 7, targetMap: 'shop_interior', targetX: 6, targetY: 8 },
+                // ダンジョンへの入口
+                { x: 20, y: 29, targetMap: 'dungeon', targetX: 15, targetY: 1 }
             ]
         },
         'forest': {
@@ -721,6 +765,168 @@ const gameData = {
             transitions: [
                 { x: 5, y: 9, targetMap: 'village', targetX: 36, targetY: 7 },
                 { x: 6, y: 9, targetMap: 'village', targetX: 36, targetY: 7 }
+            ]
+        },
+        'dungeon': {
+            name: '闇のダンジョン',
+            width: 30,
+            height: 25,
+            bgColor: '#1a1a1a',
+            encounterRate: 30, // 30歩に1回程度エンカウント
+            encounterEnemies: ['slime', 'goblin', 'skeleton'],
+            tiles: (() => {
+                const map = [];
+                for (let y = 0; y < 25; y++) {
+                    const row = [];
+                    for (let x = 0; x < 30; x++) {
+                        row.push('tile_floor');
+                    }
+                    map.push(row);
+                }
+                return map;
+            })(),
+            collision: (() => {
+                const collision = [];
+                for (let y = 0; y < 25; y++) {
+                    const row = [];
+                    for (let x = 0; x < 30; x++) {
+                        // 外周は壁
+                        if (x === 0 || x === 29 || y === 0 || y === 24) {
+                            row.push(1);
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    collision.push(row);
+                }
+
+                // 迷路のような壁を追加
+                // 横の壁
+                for (let x = 3; x < 12; x++) collision[5][x] = 1;
+                for (let x = 18; x < 27; x++) collision[5][x] = 1;
+                for (let x = 3; x < 10; x++) collision[10][x] = 1;
+                for (let x = 15; x < 27; x++) collision[10][x] = 1;
+                for (let x = 3; x < 20; x++) collision[15][x] = 1;
+                for (let x = 10; x < 27; x++) collision[20][x] = 1;
+
+                // 縦の壁
+                for (let y = 5; y < 15; y++) collision[y][12] = 1;
+                for (let y = 1; y < 10; y++) collision[y][18] = 1;
+                for (let y = 15; y < 24; y++) collision[y][20] = 1;
+                for (let y = 10; y < 20; y++) collision[y][10] = 1;
+
+                // 入口と出口は開ける
+                collision[1][15] = 0; // 入口
+                collision[23][15] = 0; // 出口（ボス部屋へ）
+
+                return collision;
+            })(),
+            objects: [
+                // 宝箱を配置
+                { x: 5, y: 3, sprite: 'obj_chest' },
+                { x: 25, y: 8, sprite: 'obj_chest' },
+                { x: 7, y: 18, sprite: 'obj_chest' },
+                { x: 22, y: 22, sprite: 'obj_chest' },
+                // 装飾
+                { x: 8, y: 7, sprite: 'obj_barrel' },
+                { x: 20, y: 12, sprite: 'obj_crate' },
+                { x: 14, y: 17, sprite: 'obj_pot' }
+            ],
+            npcs: [],
+            events: [
+                {
+                    x: 5,
+                    y: 3,
+                    type: 'treasure',
+                    dialogId: 'dungeon_chest_1',
+                    once: true,
+                    triggered: false
+                },
+                {
+                    x: 25,
+                    y: 8,
+                    type: 'treasure',
+                    dialogId: 'dungeon_chest_2',
+                    once: true,
+                    triggered: false
+                },
+                {
+                    x: 7,
+                    y: 18,
+                    type: 'treasure',
+                    dialogId: 'dungeon_chest_3',
+                    once: true,
+                    triggered: false
+                },
+                {
+                    x: 22,
+                    y: 22,
+                    type: 'treasure',
+                    dialogId: 'dungeon_chest_4',
+                    once: true,
+                    triggered: false
+                }
+            ],
+            transitions: [
+                { x: 15, y: 0, targetMap: 'village', targetX: 20, targetY: 28 },
+                { x: 15, y: 24, targetMap: 'boss_room', targetX: 12, targetY: 1 }
+            ]
+        },
+        'boss_room': {
+            name: 'ボスの間',
+            width: 25,
+            height: 20,
+            bgColor: '#0d0d0d',
+            encounterRate: 0,
+            encounterEnemies: [],
+            tiles: (() => {
+                const map = [];
+                for (let y = 0; y < 20; y++) {
+                    const row = [];
+                    for (let x = 0; x < 25; x++) {
+                        row.push('tile_floor');
+                    }
+                    map.push(row);
+                }
+                // 中央にカーペット
+                for (let y = 8; y < 12; y++) {
+                    for (let x = 10; x < 15; x++) {
+                        map[y][x] = 'tile_carpet';
+                    }
+                }
+                return map;
+            })(),
+            collision: (() => {
+                const collision = [];
+                for (let y = 0; y < 20; y++) {
+                    const row = [];
+                    for (let x = 0; x < 25; x++) {
+                        if (x === 0 || x === 24 || y === 0 || y === 19) {
+                            row.push(1);
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    collision.push(row);
+                }
+                // 入口は開ける
+                collision[0][12] = 0;
+                return collision;
+            })(),
+            objects: [],
+            npcs: [],
+            events: [
+                {
+                    x: 12,
+                    y: 15,
+                    type: 'bossBattle',
+                    dialogId: 'demon_boss',
+                    once: true,
+                    triggered: false
+                }
+            ],
+            transitions: [
+                { x: 12, y: 0, targetMap: 'dungeon', targetX: 15, targetY: 23 }
             ]
         }
     },
