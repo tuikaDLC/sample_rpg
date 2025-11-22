@@ -275,3 +275,165 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #5aa0f2;
 }
+
+/* Shop UI */
+#shop-ui {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    background: rgba(0, 0, 0, 0.95);
+    border: 3px solid #4a90e2;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.shop-container h2 {
+    margin-bottom: 20px;
+    color: #4a90e2;
+    text-align: center;
+}
+
+.shop-gold {
+    background: #1a1a1a;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 18px;
+    color: #ffd700;
+    font-weight: bold;
+}
+
+#shop-items {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.shop-item {
+    background: #222;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shop-item.disabled {
+    opacity: 0.5;
+}
+
+.shop-item-info {
+    flex: 1;
+}
+
+.shop-item-price {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.shop-buy-btn {
+    background: linear-gradient(to bottom, #50c878, #3da85e);
+    border: 2px solid #2d8a4c;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shop-buy-btn:hover:not(:disabled) {
+    background: linear-gradient(to bottom, #60d888, #4db86e);
+    transform: translateY(-2px);
+}
+
+.shop-buy-btn:disabled {
+    background: #555;
+    border-color: #444;
+    cursor: not-allowed;
+}
+
+#shop-close-btn {
+    width: 100%;
+    background: linear-gradient(to bottom, #e74c3c, #c0392b);
+    border: 2px solid #a93226;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#shop-close-btn:hover {
+    background: linear-gradient(to bottom, #f75c4c, #d0493b);
+}
+
+#shop-message {
+    background: #1a3a5f;
+    color: #4a90e2;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Quest UI */
+#quest-list-hud {
+    position: absolute;
+    top: 120px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #4a90e2;
+    max-width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.hud-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #4a90e2;
+    font-size: 14px;
+}
+
+.quest-item {
+    background: #222;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    border-left: 3px solid #50c878;
+    font-size: 12px;
+}
+
+#quest-notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    border: 3px solid #50c878;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    min-width: 400px;
+}
+
+.notification-content {
+    font-size: 18px;
+    color: #50c878;
+    font-weight: bold;
+}

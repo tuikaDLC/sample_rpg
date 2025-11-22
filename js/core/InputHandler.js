@@ -34,9 +34,18 @@ class InputHandler {
             }
         }
 
+        if (key === 'q' || key === 'Q') {
+            const questListHud = document.getElementById('quest-list-hud');
+            if (questListHud) {
+                questListHud.classList.toggle('hidden');
+            }
+        }
+
         if (key === 'Escape') {
             if (state === 'menu') {
                 eventBus.emit('closeMenu');
+            } else if (state === 'shop') {
+                eventBus.emit('closeShop');
             }
         }
 

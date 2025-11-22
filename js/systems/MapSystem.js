@@ -74,23 +74,26 @@ class MapSystem {
     }
 
     checkNPCInteraction(playerX, playerY, direction) {
-        // プレイヤーが向いている方向のマスをチェック
-        let checkX = playerX;
-        let checkY = playerY;
+        // 周囲4方向全てのNPCをチェック（どの方向からでも話しかけられる）
+        const directions = [
+            { dx: 0, dy: -1 }, // 上
+            { dx: 0, dy: 1 },  // 下
+            { dx: -1, dy: 0 }, // 左
+            { dx: 1, dy: 0 }   // 右
+        ];
 
-        switch (direction) {
-            case 'up': checkY--; break;
-            case 'down': checkY++; break;
-            case 'left': checkX--; break;
-            case 'right': checkX++; break;
-        }
+        for (let dir of directions) {
+            const checkX = playerX + dir.dx;
+            const checkY = playerY + dir.dy;
 
-        for (let npc of this.npcEntities) {
-            if (npc.x === checkX && npc.y === checkY) {
-                npc.interact();
-                return true;
+            for (let npc of this.npcEntities) {
+                if (npc.x === checkX && npc.y === checkY) {
+                    npc.interact();
+                    return true;
+                }
             }
         }
+
         return false;
     }
 

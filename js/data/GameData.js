@@ -142,15 +142,27 @@ const gameData = {
                 text: '村長「名前も、過去も、何も覚えておらんようじゃな...」'
             },
             {
-                text: '村長「とりあえず、体が動くようになったら村を見て回るとよい」'
+                text: '村長「まずは村を見て回るといい。[WASD]か[矢印キー]で移動できるぞ」'
             },
             {
-                text: '村長「何か思い出すかもしれん」',
+                text: '村長「NPCの近くで[SPACE]を押すと話しかけられる。どの方向からでもOKじゃ！」'
+            },
+            {
+                text: '村長「困ったときは[M]キーでメニューを開いてステータスを確認するんじゃ」'
+            },
+            {
+                text: '村長「それと、北の商人から買い物ができるぞ。初期資金500Gを渡しておいた」'
+            },
+            {
+                text: '村長「何か思い出すかもしれん。頑張るんじゃ！」',
                 event: {
                     type: 'setFlag',
                     flag: 'talkedToElder',
                     value: true
                 }
+            },
+            {
+                text: 'システム：チュートリアル完了！村を自由に探索しましょう'
             }
         ],
         'elder_quest': [
@@ -161,7 +173,14 @@ const gameData = {
                 text: '村長「もし君が記憶を取り戻したいなら、森の奥にある古代遺跡を調べてみるとよい」'
             },
             {
-                text: '村長「そこには不思議な力があると伝えられておる」'
+                text: '村長「まずは森でスライムを倒して経験を積むんじゃ。3体倒してみなさい」',
+                event: {
+                    type: 'acceptQuest',
+                    questId: 'first_battle'
+                }
+            },
+            {
+                text: 'クエスト「初めての戦闘」を受注しました！[Q]キーで確認できます'
             }
         ],
         'innkeeper': [
@@ -180,18 +199,14 @@ const gameData = {
         ],
         'merchant': [
             {
-                text: '商人「何か買っていくかい？」'
+                text: '商人「いらっしゃい！道具屋だよ」'
             },
             {
-                text: '商人「ポーション50G、エーテル80Gだよ」',
+                text: '商人「ポーション50G、エーテル80G、毒消し30Gで売ってるよ！」',
                 event: {
-                    type: 'giveItem',
-                    item: 'potion',
-                    quantity: 3
+                    type: 'openShop',
+                    shopId: 'village_shop'
                 }
-            },
-            {
-                text: 'ポーションを3個もらった！（デモ版のため無料）'
             }
         ],
         'mysterious_girl': [
@@ -407,6 +422,74 @@ const gameData = {
             ],
             transitions: [
                 { x: 15, y: 19, targetMap: 'forest', targetX: 15, targetY: 1 }
+            ]
+        }
+    },
+
+    // クエストデータ
+    quests: {
+        'tutorial_explore': {
+            id: 'tutorial_explore',
+            title: '村を探索しよう',
+            description: '村長に話しかけて、村の様子を知ろう',
+            requiredAmount: 1,
+            rewards: {
+                exp: 50,
+                gold: 100
+            }
+        },
+        'first_battle': {
+            id: 'first_battle',
+            title: '初めての戦闘',
+            description: '森でスライムを3体倒そう',
+            requiredAmount: 3,
+            rewards: {
+                exp: 100,
+                gold: 200,
+                items: [{ id: 'potion', amount: 3 }]
+            }
+        },
+        'gather_herbs': {
+            id: 'gather_herbs',
+            title: '薬草採集',
+            description: '薬草を5つ集めよう（デモ版ではスキップ可能）',
+            requiredAmount: 5,
+            rewards: {
+                exp: 150,
+                gold: 300,
+                items: [{ id: 'potion', amount: 5 }]
+            }
+        },
+        'defeat_dragon': {
+            id: 'defeat_dragon',
+            title: 'ドラゴン討伐',
+            description: '強敵ドラゴンを倒そう',
+            requiredAmount: 1,
+            rewards: {
+                exp: 500,
+                gold: 1000,
+                items: [{ id: 'iron_sword', amount: 1 }]
+            }
+        }
+    },
+
+    // ショップデータ
+    shops: {
+        'village_shop': {
+            id: 'village_shop',
+            name: '村の道具屋',
+            items: [
+                { id: 'potion', price: 50, amount: 1 },
+                { id: 'ether', price: 80, amount: 1 },
+                { id: 'antidote', price: 30, amount: 1 }
+            ]
+        },
+        'weapon_shop': {
+            id: 'weapon_shop',
+            name: '武器屋',
+            items: [
+                { id: 'iron_sword', price: 500, amount: 1 },
+                { id: 'steel_armor', price: 800, amount: 1 }
             ]
         }
     }

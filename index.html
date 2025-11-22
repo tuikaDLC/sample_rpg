@@ -32,9 +32,21 @@
                     <button class="menu-tab active" data-tab="status">ステータス</button>
                     <button class="menu-tab" data-tab="items">アイテム</button>
                     <button class="menu-tab" data-tab="equipment">装備</button>
+                    <button class="menu-tab" data-tab="quests">クエスト</button>
                     <button class="menu-tab" data-tab="party">パーティ</button>
                 </div>
                 <div id="menu-content"></div>
+            </div>
+            <div id="shop-ui" class="hidden">
+                <div class="shop-container">
+                    <h2 id="shop-title">ショップ</h2>
+                    <div id="shop-message" style="display: none;"></div>
+                    <div id="shop-items"></div>
+                    <button id="shop-close-btn" class="shop-btn">閉じる [ESC]</button>
+                </div>
+            </div>
+            <div id="quest-notification" class="hidden">
+                <div class="notification-content"></div>
             </div>
             <div id="hud">
                 <div id="player-info">
@@ -48,11 +60,15 @@
                       MP: <span id="player-mp">50</span>/<span id="player-max-mp">50</span>
                     </div>
                     <div class="stat-bar">
-                      EXP: <span id="player-exp">0</span>/<span id="player-next-exp">100</span>
+                      Gold: <span id="player-gold">500</span>G
                     </div>
                 </div>
+                <div id="quest-list-hud" class="hidden">
+                    <div class="hud-title">現在のクエスト</div>
+                    <div id="quest-list"></div>
+                </div>
                 <div id="controls-hint">
-                    [WASD/矢印]移動 [SPACE]調べる/決定 [M]メニュー [ESC]戻る
+                    [WASD/矢印]移動 [SPACE]調べる/決定 [M]メニュー [Q]クエスト表示 [ESC]戻る
                 </div>
             </div>
         </div>
@@ -75,6 +91,8 @@
     <script src="js/systems/BattleSystem.js"></script>
     <script src="js/systems/DialogSystem.js"></script>
     <script src="js/systems/InventorySystem.js"></script>
+    <script src="js/systems/QuestSystem.js"></script>
+    <script src="js/systems/ShopSystem.js"></script>
     <script src="js/ui/UIManager.js"></script>
     <script src="js/data/GameData.js"></script>
     <script src="js/Game.js"></script>

@@ -34,10 +34,14 @@ class Game {
         this.battleSystem = new BattleSystem();
         this.dialogSystem = new DialogSystem();
         this.inventorySystem = new InventorySystem();
+        this.questSystem = new QuestSystem();
+        this.shopSystem = new ShopSystem();
         this.uiManager = new UIManager();
 
         // グローバル参照（他のシステムからアクセスするため）
         window.battleSystem = this.battleSystem;
+        window.questSystem = this.questSystem;
+        window.shopSystem = this.shopSystem;
 
         // マップ読み込み
         this.loadMap(gameState.currentMap);

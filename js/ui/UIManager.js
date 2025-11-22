@@ -107,6 +107,35 @@ class UIManager {
                 `;
                 break;
 
+            case 'quests':
+                content.innerHTML = '<h2>クエスト</h2><div style="padding: 20px;">';
+
+                const questSystem = window.questSystem;
+                if (questSystem) {
+                    const activeQuests = questSystem.getActiveQuests();
+
+                    if (activeQuests.length === 0) {
+                        content.innerHTML += '<p style="color: #aaa;">進行中のクエストはありません</p>';
+                    } else {
+                        activeQuests.forEach(quest => {
+                            const progressText = quest.maxProgress > 1
+                                ? `進行: ${quest.progress}/${quest.maxProgress}`
+                                : '進行中';
+
+                            content.innerHTML += `
+                                <div style="padding: 15px; border: 2px solid #50c878; border-radius: 8px; margin-bottom: 15px; background: #1a1a1a;">
+                                    <div style="font-size: 18px; font-weight: bold; color: #50c878; margin-bottom: 8px;">${quest.title}</div>
+                                    <div style="margin-bottom: 8px;">${quest.description}</div>
+                                    <div style="font-size: 14px; color: #aaa;">${progressText}</div>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+
+                content.innerHTML += '</div>';
+                break;
+
             case 'party':
                 content.innerHTML = `
                     <h2>パーティ</h2>

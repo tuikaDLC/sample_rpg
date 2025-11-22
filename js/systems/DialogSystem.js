@@ -123,6 +123,19 @@ class DialogSystem {
                 gameState.player.mp = gameState.player.maxMp;
                 gameState.updateUI();
                 break;
+            case 'openShop':
+                this.closeDialog();
+                const shopSystem = window.shopSystem;
+                if (shopSystem) {
+                    shopSystem.openShop(event.shopId);
+                }
+                break;
+            case 'acceptQuest':
+                const questSystem = window.questSystem;
+                if (questSystem) {
+                    questSystem.acceptQuest(event.questId);
+                }
+                break;
         }
     }
 

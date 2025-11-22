@@ -15,6 +15,7 @@ class GameState {
             defense: 10,
             magic: 12,
             speed: 10,
+            gold: 500, // 初期所持金
             x: 10,
             y: 10,
             direction: 'down',
@@ -140,8 +141,11 @@ class GameState {
         document.getElementById('player-max-hp').textContent = this.player.maxHp;
         document.getElementById('player-mp').textContent = this.player.mp;
         document.getElementById('player-max-mp').textContent = this.player.maxMp;
-        document.getElementById('player-exp').textContent = this.player.exp;
-        document.getElementById('player-next-exp').textContent = this.getExpForNextLevel();
+
+        const goldElement = document.getElementById('player-gold');
+        if (goldElement) {
+            goldElement.textContent = this.player.gold || 0;
+        }
     }
 
     save() {
