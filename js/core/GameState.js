@@ -16,8 +16,8 @@ class GameState {
             magic: 12,
             speed: 10,
             gold: 500, // 初期所持金
-            x: 10,
-            y: 10,
+            x: 20,
+            y: 17,
             direction: 'down',
             skills: ['fire_ball', 'heal'],
             equipment: {

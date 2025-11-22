@@ -12,6 +12,7 @@ class MapSystem {
         this.encounterRate = mapData.encounterRate || 0;
         this.encounterEnemies = mapData.encounterEnemies || [];
         this.bgColor = mapData.bgColor || '#1a1a1a';
+        this.objects = mapData.objects || [];
 
         this.npcEntities = [];
         this.initNPCs();
@@ -127,6 +128,20 @@ class MapSystem {
                         y * tileSize + cameraY,
                         tileSize,
                         tileSize
+                    );
+                }
+            }
+        }
+
+        // オブジェクトを描画（地面の装飾など）
+        if (this.objects) {
+            for (let obj of this.objects) {
+                const sprite = assetLoader.getImage(obj.sprite);
+                if (sprite) {
+                    ctx.drawImage(
+                        sprite,
+                        obj.x * tileSize + cameraX,
+                        obj.y * tileSize + cameraY
                     );
                 }
             }

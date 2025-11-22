@@ -151,9 +151,9 @@ class Game {
     }
 
     updateCamera() {
-        // カメラをプレイヤー中心に
-        const targetX = this.canvas.width / 2 - (this.player.x * 32) - 16;
-        const targetY = this.canvas.height / 2 - (this.player.y * 32) - 16;
+        // カメラをプレイヤー中心に（ピクセル座標を使用）
+        const targetX = this.canvas.width / 2 - this.player.pixelX - 16;
+        const targetY = this.canvas.height / 2 - this.player.pixelY - 16;
 
         // マップ境界チェック
         const mapWidth = this.mapSystem.width * 32;
