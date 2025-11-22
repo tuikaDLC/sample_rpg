@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>失われた記憶の物語 - 2D RPG</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="960" height="640"></canvas>
+        <div id="ui-overlay">
+            <div id="dialog-box" class="hidden">
+                <div id="dialog-text"></div>
+                <div id="dialog-continue">▼ [SPACE]で続ける</div>
+            </div>
+            <div id="battle-ui" class="hidden">
+                <div id="battle-status">
+                    <div id="player-stats"></div>
+                    <div id="enemy-stats"></div>
+                </div>
+                <div id="battle-menu">
+                    <button class="battle-btn" data-action="attack">攻撃</button>
+                    <button class="battle-btn" data-action="skill">スキル</button>
+                    <button class="battle-btn" data-action="item">アイテム</button>
+                    <button class="battle-btn" data-action="defend">防御</button>
+                </div>
+                <div id="battle-log"></div>
+            </div>
+            <div id="menu-ui" class="hidden">
+                <div id="menu-tabs">
+                    <button class="menu-tab active" data-tab="status">ステータス</button>
+                    <button class="menu-tab" data-tab="items">アイテム</button>
+                    <button class="menu-tab" data-tab="equipment">装備</button>
+                    <button class="menu-tab" data-tab="party">パーティ</button>
+                </div>
+                <div id="menu-content"></div>
+            </div>
+            <div id="hud">
+                <div id="player-info">
+                    <div class="stat-bar">
+                      <span id="player-name">勇者</span> Lv.<span id="player-level">1</span>
+                    </div>
+                    <div class="stat-bar">
+                      HP: <span id="player-hp">100</span>/<span id="player-max-hp">100</span>
+                    </div>
+                    <div class="stat-bar">
+                      MP: <span id="player-mp">50</span>/<span id="player-max-mp">50</span>
+                    </div>
+                    <div class="stat-bar">
+                      EXP: <span id="player-exp">0</span>/<span id="player-next-exp">100</span>
+                    </div>
+                </div>
+                <div id="controls-hint">
+                    [WASD/矢印]移動 [SPACE]調べる/決定 [M]メニュー [ESC]戻る
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loading-screen">
+        <h1>失われた記憶の物語</h1>
+        <p>読み込み中...</p>
+    </div>
+
+    <!-- Game Scripts -->
+    <script src="js/utils/EventBus.js"></script>
+    <script src="js/utils/AssetLoader.js"></script>
+    <script src="js/core/GameState.js"></script>
+    <script src="js/core/InputHandler.js"></script>
+    <script src="js/entities/Entity.js"></script>
+    <script src="js/entities/Player.js"></script>
+    <script src="js/entities/NPC.js"></script>
+    <script src="js/entities/Enemy.js"></script>
+    <script src="js/systems/MapSystem.js"></script>
+    <script src="js/systems/BattleSystem.js"></script>
+    <script src="js/systems/DialogSystem.js"></script>
+    <script src="js/systems/InventorySystem.js"></script>
+    <script src="js/ui/UIManager.js"></script>
+    <script src="js/data/GameData.js"></script>
+    <script src="js/Game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
