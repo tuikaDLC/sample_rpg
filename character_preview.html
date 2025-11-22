@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャラクタープレビュー - ドット絵一覧</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'メイリオ', 'Meiryo', 'MS PGothic', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a90e2;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #444;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            color: #50c878;
+        }
+
+        .sprite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .sprite-item {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #555;
+        }
+
+        .sprite-item:hover {
+            border-color: #4a90e2;
+            background: #3a3a3a;
+        }
+
+        .sprite-canvas {
+            background: #444;
+            border: 2px solid #666;
+            margin: 10px auto;
+            display: block;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .sprite-name {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        .sprite-size {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .info {
+            background: #1e3a5f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: #3d7bc7;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← ゲームに戻る</a>
+
+    <h1>🎨 キャラクター＆タイルプレビュー</h1>
+
+    <div class="info">
+        <p>このページでは、ゲームで使用されているプログラム生成ドット絵を一覧表示します。</p>
+        <p>全てのグラフィックは Canvas API で動的に生成されており、外部ファイルは不要です。</p>
+    </div>
+
+    <div class="section">
+        <h2>👤 プレイヤー & NPC</h2>
+        <div class="sprite-grid" id="characters-grid"></div>
+    </div>
+
+    <div class="section">
+        <h2>👾 敵キャラクター</h2>
+        <div class="sprite-grid" id="enemies-grid"></div>
+    </div>
+
+    <div class="section">
+        <h2>🗺️ タイル</h2>
+        <div class="sprite-grid" id="tiles-grid"></div>
+    </div>
+
+    <script src="js/utils/AssetLoader.js"></script>
+    <script>
+        async function loadAndDisplay() {
+            const loader = new AssetLoader();
+            await loader.loadAssets();
+
+            // プレイヤー & NPC
+            const characters = [
+                { key: 'player', name: '勇者（主人公）', size: '32x32' },
+                { key: 'npc', name: '村人（NPC）', size: '32x32' }
+            ];
+
+            const charactersGrid = document.getElementById('characters-grid');
+            characters.forEach(char => {
+                const item = createSpriteItem(loader.getImage(char.key), char.name, char.size);
+                charactersGrid.appendChild(item);
+            });
+
+            // 敵
+            const enemies = [
+                { key: 'enemy_slime', name: 'スライム', size: '32x32' },
+                { key: 'enemy_goblin', name: 'ゴブリン', size: '32x32' },
+                { key: 'enemy_skeleton', name: 'スケルトン', size: '32x32' },
+                { key: 'enemy_dragon', name: 'ドラゴン', size: '48x48' },
+                { key: 'boss_demon', name: '魔王', size: '64x64' }
+            ];
+
+            const enemiesGrid = document.getElementById('enemies-grid');
+            enemies.forEach(enemy => {
+                const item = createSpriteItem(loader.getImage(enemy.key), enemy.name, enemy.size);
+                enemiesGrid.appendChild(item);
+            });
+
+            // タイル
+            const tiles = [
+                { key: 'tile_grass', name: '草地', size: '32x32' },
+                { key: 'tile_water', name: '水', size: '32x32' },
+                { key: 'tile_stone', name: '石畳', size: '32x32' },
+                { key: 'tile_floor', name: '床', size: '32x32' },
+                { key: 'tile_wall', name: '壁', size: '32x32' },
+                { key: 'tile_door', name: 'ドア', size: '32x32' },
+                { key: 'tile_chest', name: '宝箱', size: '32x32' }
+            ];
+
+            const tilesGrid = document.getElementById('tiles-grid');
+            tiles.forEach(tile => {
+                const item = createSpriteItem(loader.getImage(tile.key), tile.name, tile.size);
+                tilesGrid.appendChild(item);
+            });
+        }
+
+        function createSpriteItem(canvas, name, size) {
+            const div = document.createElement('div');
+            div.className = 'sprite-item';
+
+            const displayCanvas = document.createElement('canvas');
+            displayCanvas.className = 'sprite-canvas';
+            displayCanvas.width = canvas.width * 2; // 2倍拡大
+            displayCanvas.height = canvas.height * 2;
+
+            const ctx = displayCanvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(canvas, 0, 0, canvas.width * 2, canvas.height * 2);
+
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'sprite-name';
+            nameDiv.textContent = name;
+
+            const sizeDiv = document.createElement('div');
+            sizeDiv.className = 'sprite-size';
+            sizeDiv.textContent = size;
+
+            div.appendChild(displayCanvas);
+            div.appendChild(nameDiv);
+            div.appendChild(sizeDiv);
+
+            return div;
+        }
+
+        loadAndDisplay();
+    </script>
+</body>
+</html>
